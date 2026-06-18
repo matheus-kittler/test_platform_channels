@@ -1,0 +1,42 @@
+name: via_cep_app
+description: "Projeto Via CEP aplicando Clean Architecture e Riverpod."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Navigation & State Management
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+
+  # Networking
+  dio: ^5.4.3
+  retrofit: 4.1.0
+
+  # Local Storage
+  flutter_secure_storage: ^9.2.2
+
+  # Data Modeling & Utils
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Code Generation
+  build_runner: ^2.4.9
+  freezed: ^2.4.7
+  json_serializable: ^6.8.0
+  retrofit_generator: 8.1.0
+  
+  # Forçar o analisador correto para o seu SDK Dart atual (Adicionado)
+  analyzer: ^6.4.1
+  
+  # Linter
+  flutter_lints: ^4.0.0
