@@ -23,7 +23,7 @@ All hardcoded business logic, UI rendering, and deep-linking routines have been 
 ## 📂 Architecture Blueprint
 
 ### Android Module
-
+```text
 android/app/src/main/java/br/com/matheuskittler/via_cep/
 │
 ├── domain/
@@ -37,11 +37,11 @@ android/app/src/main/java/br/com/matheuskittler/via_cep/
 │       └── MapsMethodChannelHandler.kt
 │
 └── MainActivity.kt
-
+```
 ---
 
 ### iOS Module
-
+```text
 ios/Runner/
 │
 ├── Domain/
@@ -63,3 +63,4 @@ ios/Runner/
 │       └── AddressRowView.swift
 │
 └── AppDelegate.swift
+```
