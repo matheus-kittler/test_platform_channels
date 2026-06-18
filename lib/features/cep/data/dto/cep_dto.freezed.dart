@@ -172,8 +172,7 @@ class __$$CepDtoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$CepDtoImpl extends _CepDto {
   const _$CepDtoImpl(
       {required this.cep,

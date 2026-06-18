@@ -23,6 +23,8 @@ class _CepDetalhesPageState extends State<CepDetalhesPage> {
 
   @override
   Widget build(BuildContext context) {
+    const platform = MethodChannel('br.com.matheuskittler.via_cep/maps');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalhes do Endereço'),
@@ -52,7 +54,6 @@ class _CepDetalhesPageState extends State<CepDetalhesPage> {
                       ),
                       const SizedBox(height: 16),
                       
-                      // Campo de Número posicionado logo abaixo do Logradouro
                       TextFormField(
                         controller: _numeroController,
                         decoration: const InputDecoration(
@@ -93,26 +94,25 @@ class _CepDetalhesPageState extends State<CepDetalhesPage> {
                 ),
               ),
               const Spacer(),
+              
+              // BOTÃO 1: Fluxo do Android (Google Maps Direto)
               ElevatedButton.icon(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final numero = _numeroController.text;
-                    
-                    // Inicializa o canal de comunicação nativa com o Android
-                    const platform = MethodChannel('br.com.matheuskittler.via_cep/maps');
-                    
                     try {
-                      // Dispara os dados estruturados para o Kotlin
                       await platform.invokeMethod('abrirMapsNativo', {
                         'logradouro': widget.cepEntity.logradouro,
-                        'numero': numero,
+                        'numero': _numeroController.text,
                         'bairro': widget.cepEntity.bairro,
                         'localidade': widget.cepEntity.localidade,
                         'uf': widget.cepEntity.uf,
                       });
                     } on PlatformException catch (e) {
+                      // TRAVA DE SEGURANÇA ADICIONADA AQUI 👇
+                      if (!context.mounted) return;
+                      
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Erro no canal nativo: ${e.message}")),
+                        SnackBar(content: Text("Erro Android Nativo: ${e.message}")),
                       );
                     }
                   }
@@ -122,6 +122,39 @@ class _CepDetalhesPageState extends State<CepDetalhesPage> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: Colors.green[700],
+                  foregroundColor: Colors.white,
+                ),
+              ),
+              
+              const SizedBox(height: 12),
+              
+              // BOTÃO 2: Fluxo do iOS (Abre a Lista Nativa em SwiftUI)
+              ElevatedButton.icon(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      await platform.invokeMethod('salvarEExibirNativo', {
+                        'logradouro': widget.cepEntity.logradouro,
+                        'numero': _numeroController.text,
+                        'bairro': widget.cepEntity.bairro,
+                        'localidade': widget.cepEntity.localidade,
+                        'uf': widget.cepEntity.uf,
+                      });
+                    } on PlatformException catch (e) {
+                      // TRAVA DE SEGURANÇA ADICIONADA AQUI 👇
+                      if (!context.mounted) return;
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Erro iOS Nativo: ${e.message}")),
+                      );
+                    }
+                  }
+                },
+                icon: const Icon(Icons.phone_iphone_rounded),
+                label: const Text('Enviar para Lista Nativa iOS'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: Colors.blue[800],
                   foregroundColor: Colors.white,
                 ),
               ),
